@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const basicData = require('./lib/basic_data.js');
+const domiciles = require('./lib/domiciles.js');
 
 
 app.get('/', function (req, res) {
@@ -9,10 +10,19 @@ app.get('/', function (req, res) {
     { 
       "planets": basicData.planets,
       "elements": basicData.elements,
-      "signs": basicData.signs.map(function(signData){
+      "signs": basicData.signs.map(function(data){
         return {
-          "name": signData[0],
-          "element": basicData.elements[signData[1]]
+          "name": data[0],
+          "element": basicData.elements[data[1]]
+        }
+      }),
+      "domiciles": basicData.planets.map(function(planet){
+        const planetId = basicData.planets.indexOf(planet);
+        return {
+          "planet": planet,
+          "domiciles": domiciles.data[planetId].map(function(signId) {
+            return basicData.signs[signId][0]
+          }).join(' y ')
         }
       })
     }
